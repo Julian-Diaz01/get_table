@@ -6,7 +6,7 @@ interface Column<T> {
     label: string;
     minWidth?: number;
     align?: 'right' | 'left' | 'center';
-    format?: (value: T[keyof T]) => React.ReactNode;
+    format?: (value: T[keyof T], row: T) => React.ReactNode;
 }
 
 interface FlexibleTableProps<T> {
@@ -24,7 +24,7 @@ const FlexibleTable = <T extends object>({columns, data}: FlexibleTableProps<T>)
                             <TableCell
                                 key={String(column.id)}
                                 align={column.align || 'left'}
-                                style={{minWidth: column.minWidth}}
+                                style={{minWidth: column.minWidth, fontWeight: 'bold', padding: '8px 16px'}}
                             >
                                 {column.label}
                             </TableCell>
@@ -38,8 +38,8 @@ const FlexibleTable = <T extends object>({columns, data}: FlexibleTableProps<T>)
                                 {columns.map((column) => {
                                     const value = row[column.id];
                                     return (
-                                        <TableCell key={String(column.id)} align={column.align}>
-                                            {column.format ? column.format(value) : String(value)}
+                                        <TableCell key={String(column.id)} align={column.align} style={{padding: '8px 16px'}}>
+                                            {column.format ? column.format(value, row) : String(value)}
                                         </TableCell>
                                     );
                                 })}
