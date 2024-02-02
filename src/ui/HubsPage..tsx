@@ -6,6 +6,7 @@ import PlasticProgress from "../components/Table/PlasticProgress.tsx";
 import HubLink from "../components/Table/HubLink.tsx";
 import {HubStage, HubStageEnum} from "../components/Table/HubStage.tsx";
 import {capitalizeFirstLetter} from "../utils/format.ts";
+import FilterComponent from "../components/FilterComponent.tsx";
 
 interface HubData {
     recoveredQuantity?: number;
@@ -22,12 +23,14 @@ interface HubData {
 
 const HubsPage = () => {
     const [hubs, setHubs] = useState<HubData[]>([]);
+    const [filteredHubs, setFilteredHubs] = useState<HubData[]>([]);
 
     useEffect(() => {
         const fetchHubs = async () => {
             try {
                 const response = await request.get<HubData[]>('https://marketplace-demo.cleanhub.com/api/public/hubs');
                 setHubs(response.data);
+                setFilteredHubs(response.data);
             } catch (error) {
                 console.error('Failed to fetch hubs:', error);
             }
@@ -35,6 +38,18 @@ const HubsPage = () => {
 
         fetchHubs();
     }, []);
+
+    const handleFilterChange = (filters: { stage: string; location: string; name: string }) => {
+        const filteredData = hubs.filter((hub) => {
+            const stageMatch = filters.stage ? hub.stage?.toLowerCase().includes(filters.stage.toLowerCase()) : true;
+            const locationMatch = filters.location ? hub.location?.toLowerCase().includes(filters.location.toLowerCase()) : true;
+            const nameMatch = filters.name ? hub.displayName?.toLowerCase().includes(filters.name.toLowerCase()) : true;
+
+            return stageMatch && locationMatch && nameMatch;
+        });
+
+        setFilteredHubs(filteredData);
+    };
 
     const columns = [
         {
@@ -79,8 +94,10 @@ const HubsPage = () => {
     ];
     return (
         <div>
-            <h2>Hubs</h2>
-            {hubs.length !== 0 ? <FlexibleTable<HubData> columns={columns} data={hubs}/> : <div>Loading...</div>}
+            <h2 style={{textAlign: 'left'}}>Active Hubs</h2>
+            <FilterComponent onFilterChange={handleFilterChange}/>
+            {hubs.length !== 0 ? <FlexibleTable<HubData> columns={columns} data={filteredHubs}/> :
+                <div>Loading...</div>}
         </div>
     );
 };
