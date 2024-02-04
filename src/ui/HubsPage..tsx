@@ -40,7 +40,7 @@ const HubsPage = () => {
         fetchHubs();
     }, []);
 
-    const handleFilterChange = (filters: { stage: string; location: string; name: string }) => {
+    const handleFilterChange = (filters: { stage?: string; location?: string; name?: string }) => {
         const filteredData = hubs.filter((hub) => {
             const stageMatch = filters.stage ? hub.stage?.toLowerCase().includes(filters.stage.toLowerCase()) : true;
             const locationMatch = filters.location ? hub.location?.toLowerCase().includes(filters.location.toLowerCase()) : true;
@@ -56,11 +56,10 @@ const HubsPage = () => {
         {
             id: 'logo',
             label: '',
-            format: (value: HubData['logo'], row: HubData) =><>
+            format: (value: HubData['logo'], row: HubData) => <>
                 <ShowJson obj={row}/>
                 <ShowLogo logo={value} name={row.displayName}/></>
         },
-        {id: 'displayName', label: 'Name'},
         {id: 'location', label: 'Location', format: (value: string) => value ? value : '-'},
         {id: 'category', label: 'Category', format: (value: string) => capitalizeFirstLetter(value)},
         {

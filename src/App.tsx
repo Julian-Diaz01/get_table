@@ -1,12 +1,13 @@
 import './App.css'
 import HubsPage from "./ui/HubsPage..tsx";
+import PageStructure from "./components/Page.tsx";
 
 function App() {
 
     return (
-        <div style={{margin: '20px'}}>
+        <PageStructure>
             <HubsPage/>
-        </div>
+        </PageStructure>
     )
 }
 

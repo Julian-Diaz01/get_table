@@ -17,17 +17,17 @@ const HubStage: React.FC<HubStageProps> = ({ stage }) => {
         switch (stage) {
             case HubStageEnum.PILOT:
                 return {
-                    icon: <RocketLaunchIcon style={{color: '#6caeff'}}/>,
+                    icon: <RocketLaunchIcon color="primary"/>,
                     tooltip: 'Pilot Stage',
                 };
             case HubStageEnum.FULLY_ONBOARDED:
                 return {
-                    icon: <HandshakeIcon style={{color: '#6caeff'}}/>,
+                    icon: <HandshakeIcon color="primary"/>,
                     tooltip: 'Fully Onboarded',
                 };
             default:
                 return {
-                    icon: <QuestionMarkIcon style={{color: '#6caeff'}}/>,
+                    icon: <QuestionMarkIcon color="primary"/>,
                     tooltip: 'Unknown Stage',
                 };
         }

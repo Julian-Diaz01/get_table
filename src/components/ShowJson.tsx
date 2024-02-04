@@ -44,7 +44,7 @@ export function ShowJson<T>({ obj }: ShowJsonProps<T>) {
         <div style={{float: "left", transform: "translate(-20px, -12px)"}}>
             <AddIcon
                 style={{
-                    color: "#00000050",
+                    color: "#00000020",
                     cursor: "default",
                 }}
                 onClick={handleClick}

@@ -1,4 +1,4 @@
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from '@mui/material';
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material';
 import React from "react";
 
 interface Column<T> {
@@ -16,7 +16,7 @@ interface FlexibleTableProps<T> {
 
 const FlexibleTable = <T extends object>({columns, data}: FlexibleTableProps<T>) => {
     return (
-        <TableContainer component={Paper}>
+        <TableContainer style={{border: "0.5px solid #00000020"}}>
             <Table sx={{minWidth: 650}} aria-label="flexible table">
                 <TableHead>
                     <TableRow>

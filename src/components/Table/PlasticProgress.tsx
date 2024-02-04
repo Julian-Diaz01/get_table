@@ -18,7 +18,7 @@ const PlasticProgress: React.FC<PlasticProgressProps> = ({recoveredQuantity = 0,
                 <LinearProgress
                     variant="determinate"
                     value={progress}
-                    sx={{width: '100%', marginTop: 2, backgroundColor: totalPlastic >= 0 ? 'red' : undefined,}}
+                    sx={{width: '100%', marginTop: 2, backgroundColor: totalPlastic >= 0 ? '#c74a4a' : undefined,}}
                     color={progress === 100 ? 'success' : 'primary'}
                 />
 
