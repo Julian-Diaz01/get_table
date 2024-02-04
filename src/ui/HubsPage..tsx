@@ -7,6 +7,7 @@ import HubLink from "../components/Table/HubLink.tsx";
 import {HubStage, HubStageEnum} from "../components/Table/HubStage.tsx";
 import {capitalizeFirstLetter} from "../utils/format.ts";
 import FilterComponent from "../components/FilterComponent.tsx";
+import {ShowJson} from "../components/ShowJson.tsx";
 
 interface HubData {
     recoveredQuantity?: number;
@@ -39,7 +40,7 @@ const HubsPage = () => {
         fetchHubs();
     }, []);
 
-    const handleFilterChange = (filters: { stage: string; location: string; name: string }) => {
+    const handleFilterChange = (filters: { stage?: string; location?: string; name?: string }) => {
         const filteredData = hubs.filter((hub) => {
             const stageMatch = filters.stage ? hub.stage?.toLowerCase().includes(filters.stage.toLowerCase()) : true;
             const locationMatch = filters.location ? hub.location?.toLowerCase().includes(filters.location.toLowerCase()) : true;
@@ -55,9 +56,10 @@ const HubsPage = () => {
         {
             id: 'logo',
             label: '',
-            format: (value: HubData['logo'], row: HubData) => <ShowLogo logo={value} name={row.displayName}/>
+            format: (value: HubData['logo'], row: HubData) => <>
+                <ShowJson obj={row}/>
+                <ShowLogo logo={value} name={row.displayName}/></>
         },
-        {id: 'displayName', label: 'Name'},
         {id: 'location', label: 'Location', format: (value: string) => value ? value : '-'},
         {id: 'category', label: 'Category', format: (value: string) => capitalizeFirstLetter(value)},
         {

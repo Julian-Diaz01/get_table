@@ -79,7 +79,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({onFilterChange}) => {
                     />
                 </Grid>
                 <Grid item xs={1}>
-                    <Button variant="contained" color="secondary" onClick={handleResetFilters}>
+                    <Button variant="outlined" onClick={handleResetFilters}>
                         Reset
                     </Button>
                 </Grid>
