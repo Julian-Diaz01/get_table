@@ -93,7 +93,7 @@ const HubsPage = () => {
                 <HubLink displayName={row.displayName}/> : null
             ,
         },
-    ];
+    ] as never;
     return (
         <div>
             <h2 style={{textAlign: 'left'}}>Active Hubs</h2>
