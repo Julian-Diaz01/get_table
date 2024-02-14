@@ -1,5 +1,5 @@
 import './App.css'
-import HubsPage from "./ui/HubsPage..tsx";
+import HubsPage from "./ui/HubsPage.tsx";
 import PageStructure from "./components/Page.tsx";
 
 function App() {

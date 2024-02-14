@@ -2,12 +2,13 @@ import React, {useState, useEffect} from 'react';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import {HubStageEnum} from "./Table/HubStage.tsx";
-import {capitalizeFirstLetter} from "../utils/format.ts";
 import {Button} from "@mui/material";
+import {GroupByEnum, HubStageEnum} from "../models/HubsModels";
+import {capitalizeFirstLetter} from "../utils/format";
 
 interface FilterComponentProps {
     onFilterChange: (filters: { stage?: HubStageEnum; location?: string; name?: string }) => void;
+    onGroupChange: (filters: { groupBy?: string }) => void;
 }
 
 interface Filters {
@@ -16,7 +17,7 @@ interface Filters {
     name?: string;
 }
 
-const FilterComponent: React.FC<FilterComponentProps> = ({onFilterChange}) => {
+const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onGroupChange }) => {
     const initialFilters: Filters = {};
     const [filters, setFilters] = useState<Filters>(initialFilters);
 
@@ -34,6 +35,11 @@ const FilterComponent: React.FC<FilterComponentProps> = ({onFilterChange}) => {
     const handleResetFilters = () => {
         setFilters(initialFilters);
     };
+
+    const handleGroupChange = (value: string | null) => {
+        onGroupChange({ groupBy: value || 'none' });
+    };
+
 
     return (
         <div style={{margin: '16px 0'}}>
@@ -69,6 +75,24 @@ const FilterComponent: React.FC<FilterComponentProps> = ({onFilterChange}) => {
                             <TextField
                                 {...params}
                                 label="Select Stage"
+                                variant="outlined"
+                                fullWidth
+                                size="small"
+                                value={filters.stage || ''}
+                                InputLabelProps={{shrink: true}}
+                            />
+                        )}
+                    />
+                </Grid>
+                <Grid item xs={4}>
+                    <Autocomplete
+                        options={Object.values(GroupByEnum)}
+                        getOptionLabel={value => capitalizeFirstLetter(value.replace('_', ' '))}
+                        onChange={(_, value) => handleGroupChange(value)}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Group"
                                 variant="outlined"
                                 fullWidth
                                 size="small"
