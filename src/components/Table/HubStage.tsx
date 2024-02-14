@@ -3,11 +3,7 @@ import Tooltip from '@mui/material/Tooltip';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import HandshakeIcon from '@mui/icons-material/Handshake';
-enum HubStageEnum {
-    PILOT = 'PILOT',
-    FULLY_ONBOARDED = 'FULLY_ONBOARDED',
-}
-
+import { HubStageEnum } from '../../models/HubsModels';
 interface HubStageProps {
     stage: HubStageEnum | undefined;
 }
