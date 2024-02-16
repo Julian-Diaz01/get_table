@@ -35,48 +35,32 @@ const HubsPage = () => {
         fetchHubs();
     }, []);
 
-    const handleFilterChange = (filters: { stage?: string; location?: string; name?: string }) => {
-
-        const lowerCaseFilters = {
-            stage: filters.stage ? filters.stage.toLowerCase() : undefined,
-            location: filters.location ? filters.location.toLowerCase() : undefined,
-            name: filters.name ? filters.name.toLowerCase() : undefined,
-        };
-
+    const handleFilterChange = (filters: { groupBy?: string, stage?: string; location?: string; name?: string }) => {
         const filteredData = hubs.filter((hub) => {
-            const stageMatch = lowerCaseFilters.stage ? hub.stage?.toLowerCase().includes(lowerCaseFilters.stage) : true;
-            const locationMatch = lowerCaseFilters.location ? hub.location?.toLowerCase().includes(lowerCaseFilters.location) : true;
-            const nameMatch = lowerCaseFilters.name ? hub.displayName?.toLowerCase().includes(lowerCaseFilters.name) : true;
+            const stageMatch = !filters.stage || hub.stage?.toLowerCase().includes(filters.stage.toLowerCase());
+            const locationMatch = !filters.location || hub.location?.toLowerCase().includes(filters.location.toLowerCase());
+            const nameMatch = !filters.name || hub.displayName?.toLowerCase().includes(filters.name.toLowerCase());
 
             return stageMatch && locationMatch && nameMatch;
         });
 
-        setFilteredHubs(filteredData);
-    };
-
-    const handleGroupChange = (filters: { groupBy?: string, stage?: string; location?: string; name?: string }) => {
-        const filteredData = hubs.filter((hub) => {
-            const stageMatch = !filters.groupBy || !filters.stage || hub.stage?.toLowerCase().includes(filters.stage.toLowerCase());
-            const locationMatch = !filters.groupBy || !filters.location || hub.location?.toLowerCase().includes(filters.location.toLowerCase());
-            const nameMatch = !filters.groupBy || !filters.name || hub.displayName?.toLowerCase().includes(filters.name.toLowerCase());
-
-            return stageMatch && locationMatch && nameMatch;
-        });
-
-        const groupData: Record<string, HubData[]> = {};
-
-        filteredData.forEach(hub => {
-            const groupKey = hub[filters.groupBy?.toLowerCase() as keyof HubData];
-            if (groupKey !== undefined && typeof groupKey === 'string') {
-                if (!groupData[groupKey]) {
-                    groupData[groupKey] = [];
+        if (filters.groupBy) {
+            const groupData: Record<string, HubData[]> = {};
+            filteredData.forEach(hub => {
+                const groupKey = hub[filters.groupBy?.toLowerCase() as keyof HubData];
+                if (groupKey !== undefined && typeof groupKey === 'string') {
+                    if (!groupData[groupKey]) {
+                        groupData[groupKey] = [];
+                    }
+                    groupData[groupKey].push(hub);
                 }
-
-                groupData[groupKey].push(hub);
-            }
-        });
-
-        setGroupHubs(groupData);
+            });
+            setGroupHubs(groupData);
+            setFilteredHubs(filteredData);
+        } else {
+            setFilteredHubs(filteredData);
+            setGroupHubs({});
+        }
     };
 
 
@@ -125,12 +109,18 @@ const HubsPage = () => {
     return (
         <div>
             <h2 style={{textAlign: 'left'}}>Active Hubs</h2>
-            <FilterComponent onFilterChange={handleFilterChange} onGroupChange={handleGroupChange}/>
-            {hubs.length !== 0 ?
-                Object.entries(groupHubs).length !== 0 ?
-                    <GroupedTables columns={columns} groups={groupHubs}/> :
-                    <FlexibleTable<HubData> columns={columns} data={filteredHubs}/> :
-                <div>Loading...</div>}
+            <FilterComponent onFilterChange={handleFilterChange}/>
+            {hubs.length === 0 ? (
+                <div>Loading...</div>
+            ) : Object.entries(groupHubs).length !== 0 ? (
+                <GroupedTables columns={columns} groups={groupHubs}/>
+            ) : filteredHubs.length > 0 ? (
+                <FlexibleTable<HubData> columns={columns} data={filteredHubs}/>
+            ) : (
+                <div style={{marginTop: '20px', textAlign: 'center'}}>
+                    No matching hubs found. Please adjust your filters.
+                </div>
+            )}
         </div>
     );
 };
