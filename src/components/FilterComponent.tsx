@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -7,17 +7,17 @@ import {GroupByEnum, HubStageEnum} from "../models/HubsModels";
 import {capitalizeFirstLetter} from "../utils/format";
 
 interface FilterComponentProps {
-    onFilterChange: (filters: { stage?: HubStageEnum; location?: string; name?: string }) => void;
-    onGroupChange: (filters: { groupBy?: string }) => void;
+    onFilterChange: (filters: Filters) => void;
 }
 
 interface Filters {
     stage?: HubStageEnum;
     location?: string;
     name?: string;
+    groupBy?: GroupByEnum;
 }
 
-const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onGroupChange }) => {
+const FilterComponent: React.FC<FilterComponentProps> = ({onFilterChange}) => {
     const initialFilters: Filters = {};
     const [filters, setFilters] = useState<Filters>(initialFilters);
 
@@ -34,10 +34,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onGro
 
     const handleResetFilters = () => {
         setFilters(initialFilters);
-    };
-
-    const handleGroupChange = (value: string | null) => {
-        onGroupChange({ groupBy: value || 'none' });
     };
 
 
@@ -88,7 +84,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onGro
                     <Autocomplete
                         options={Object.values(GroupByEnum)}
                         getOptionLabel={value => capitalizeFirstLetter(value.replace('_', ' '))}
-                        onChange={(_, value) => handleGroupChange(value)}
+                        onChange={(_, value) => handleInputChange('groupBy', value ?? 'none')}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
